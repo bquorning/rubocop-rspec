@@ -4,7 +4,15 @@ rspec: &rspec
   steps:
     - checkout
     - run: bundle install
-    - run: rake spec
+    - run:
+        name: rspec
+        command: >
+          rspec
+          --format documentation
+          --format RspecJunitFormatter
+          --out ci-results/RSpec/rspec.xml
+    - store_test_results:
+        path: ci-results
 
 rubocop: &rubocop
   steps:

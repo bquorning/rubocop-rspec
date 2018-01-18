@@ -4,6 +4,7 @@ gemspec
 
 group :test do
   gem 'simplecov', require: false
+  gem 'rspec_junit_formatter'
 end
 
 local_gemfile = 'Gemfile.local'

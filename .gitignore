@@ -17,6 +17,7 @@ Gemfile.local
 # jeweler generated
 pkg
 
+/ci-results
 /vendor
 
 .ruby-gemset
