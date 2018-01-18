@@ -5,6 +5,7 @@ gemspec
 group :test do
   gem 'simplecov', require: false
   gem 'rspec_junit_formatter'
+  gem 'rubocop-junit-formatter'
 end
 
 local_gemfile = 'Gemfile.local'

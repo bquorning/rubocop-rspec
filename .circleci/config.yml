@@ -18,7 +18,16 @@ rubocop: &rubocop
   steps:
     - checkout
     - run: bundle install
-    - run: rake internal_investigation
+    - run:
+        name: rubocop
+        command: >
+          rubocop
+          -r $(bundle show rubocop-junit-formatter)/lib/rubocop/formatter/junit_formatter.rb
+          --format progress
+          --format RuboCop::Formatter::JUnitFormatter
+          --out ci-results/RuboCop/rubocop.xml
+    - store_test_results:
+        path: ci-results
 
 jobs:
   confirm_config_and_documentation:
