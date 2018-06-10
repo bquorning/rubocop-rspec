@@ -3,15 +3,15 @@ version: 2
 restore_cache: &restore_cache
   restore_cache:
     keys:
-      - bundle-d0a0802f-7e10-4e22-931b-4b193231b93c-{{ .Environment.RUBY_VERSION }}-{{ checksum "Gemfile.lock" }}
-      - bundle-d0a0802f-7e10-4e22-931b-4b193231b93c-{{ .Environment.RUBY_VERSION }}-
+      - bundle-d0a0802f-7e10-4e22-931b-4b193231b93c-{{ .Environment.CIRCLE_JOB }}-{{ checksum "Gemfile.lock" }}
+      - bundle-d0a0802f-7e10-4e22-931b-4b193231b93c-{{ .Environment.CIRCLE_JOB }}-
 
 bundle: &bundle
   run: bundle install --path vendor/bundle
 
 save_cache: &save_cache
   save_cache:
-    key: bundle-d0a0802f-7e10-4e22-931b-4b193231b93c-{{ .Environment.RUBY_VERSION }}-{{ checksum "Gemfile.lock" }}
+    key: bundle-d0a0802f-7e10-4e22-931b-4b193231b93c-{{ .Environment.CIRCLE_JOB }}-{{ checksum "Gemfile.lock" }}
     paths:
       - vendor/bundle
 
@@ -35,8 +35,6 @@ jobs:
   confirm_config_and_documentation:
     docker:
       - image: circleci/ruby:2.5
-    environment:
-      RUBY_VERSION: ruby:2.5
     steps:
       - checkout
       - <<: *restore_cache
@@ -48,78 +46,56 @@ jobs:
   ruby-2.1-rspec:
     docker:
       - image: circleci/ruby:2.1
-    environment:
-      RUBY_VERSION: ruby:2.1
     <<: *rspec
   ruby-2.1-rubocop:
     docker:
       - image: circleci/ruby:2.1
-    environment:
-      RUBY_VERSION: ruby:2.1
     <<: *rubocop
 
   # Ruby 2.2
   ruby-2.2-rspec:
     docker:
       - image: circleci/ruby:2.2
-    environment:
-      RUBY_VERSION: ruby:2.2
     <<: *rspec
   ruby-2.2-rubocop:
     docker:
       - image: circleci/ruby:2.2
-    environment:
-      RUBY_VERSION: ruby:2.2
     <<: *rubocop
 
   # Ruby 2.3
   ruby-2.3-rspec:
     docker:
       - image: circleci/ruby:2.3
-    environment:
-      RUBY_VERSION: ruby:2.3
     <<: *rspec
   ruby-2.3-rubocop:
     docker:
       - image: circleci/ruby:2.3
-    environment:
-      RUBY_VERSION: ruby:2.3
     <<: *rubocop
 
   # Ruby 2.4
   ruby-2.4-rspec:
     docker:
       - image: circleci/ruby:2.4
-    environment:
-      RUBY_VERSION: ruby:2.4
     <<: *rspec
   ruby-2.4-rubocop:
     docker:
       - image: circleci/ruby:2.4
-    environment:
-      RUBY_VERSION: ruby:2.4
     <<: *rubocop
 
   # Ruby 2.5
   ruby-2.5-rspec:
     docker:
       - image: circleci/ruby:2.5
-    environment:
-      RUBY_VERSION: ruby:2.5
     <<: *rspec
   ruby-2.5-rubocop:
     docker:
       - image: circleci/ruby:2.5
-    environment:
-      RUBY_VERSION: ruby:2.5
     <<: *rubocop
 
   # JRuby
   jruby:
     docker:
       - image: circleci/jruby:9.1
-    environment:
-      RUBY_VERSION: jruby:9.1
     steps:
       - checkout
       - run: sudo apt-get install -y make
@@ -131,8 +107,6 @@ jobs:
   code-climate:
     docker:
       - image: circleci/ruby:2.5
-    environment:
-      RUBY_VERSION: circleci/ruby:2.5
     steps:
       - checkout
       - <<: *restore_cache
