@@ -1,101 +1,143 @@
 version: 2
 
+restore_cache: &restore_cache
+  restore_cache:
+    keys:
+      - bundle-d0a0802f-7e10-4e22-931b-4b193231b93c-{{ .Environment.RUBY_VERSION }}-{{ checksum "Gemfile.lock" }}
+      - bundle-d0a0802f-7e10-4e22-931b-4b193231b93c-{{ .Environment.RUBY_VERSION }}-
+
+bundle: &bundle
+  run: bundle install --path vendor/bundle
+
+save_cache: &save_cache
+  save_cache:
+    key: bundle-d0a0802f-7e10-4e22-931b-4b193231b93c-{{ .Environment.RUBY_VERSION }}-{{ checksum "Gemfile.lock" }}
+    paths:
+      - vendor/bundle
+
 rspec: &rspec
   steps:
     - checkout
-    - run: bundle install
+    - <<: *restore_cache
+    - <<: *bundle
+    - <<: *save_cache
     - run: rake spec
 
 rubocop: &rubocop
   steps:
     - checkout
-    - run: bundle install
+    - <<: *restore_cache
+    - <<: *bundle
+    - <<: *save_cache
     - run: rake internal_investigation
 
 jobs:
   confirm_config_and_documentation:
     docker:
       - image: circleci/ruby:2.5
+    environment:
+      RUBY_VERSION: ruby:2.5
     steps:
       - checkout
-      - run: bundle install
+      - <<: *restore_cache
+      - <<: *bundle
+      - <<: *save_cache
       - run: rake confirm_config documentation_syntax_check confirm_documentation
 
   # Ruby 2.1
   ruby-2.1-rspec:
     docker:
       - image: circleci/ruby:2.1
+    environment:
+      RUBY_VERSION: ruby:2.1
     <<: *rspec
   ruby-2.1-rubocop:
     docker:
       - image: circleci/ruby:2.1
+    environment:
+      RUBY_VERSION: ruby:2.1
     <<: *rubocop
 
   # Ruby 2.2
   ruby-2.2-rspec:
     docker:
       - image: circleci/ruby:2.2
+    environment:
+      RUBY_VERSION: ruby:2.2
     <<: *rspec
   ruby-2.2-rubocop:
     docker:
       - image: circleci/ruby:2.2
+    environment:
+      RUBY_VERSION: ruby:2.2
     <<: *rubocop
 
   # Ruby 2.3
   ruby-2.3-rspec:
     docker:
       - image: circleci/ruby:2.3
+    environment:
+      RUBY_VERSION: ruby:2.3
     <<: *rspec
   ruby-2.3-rubocop:
     docker:
       - image: circleci/ruby:2.3
+    environment:
+      RUBY_VERSION: ruby:2.3
     <<: *rubocop
 
   # Ruby 2.4
   ruby-2.4-rspec:
     docker:
       - image: circleci/ruby:2.4
+    environment:
+      RUBY_VERSION: ruby:2.4
     <<: *rspec
   ruby-2.4-rubocop:
     docker:
       - image: circleci/ruby:2.4
+    environment:
+      RUBY_VERSION: ruby:2.4
     <<: *rubocop
 
   # Ruby 2.5
   ruby-2.5-rspec:
     docker:
       - image: circleci/ruby:2.5
+    environment:
+      RUBY_VERSION: ruby:2.5
     <<: *rspec
   ruby-2.5-rubocop:
     docker:
       - image: circleci/ruby:2.5
+    environment:
+      RUBY_VERSION: ruby:2.5
     <<: *rubocop
 
   # JRuby
   jruby:
     docker:
       - image: circleci/jruby:9.1
+    environment:
+      RUBY_VERSION: jruby:9.1
     steps:
       - checkout
       - run: sudo apt-get install -y make
-      - run: bundle lock
-      - restore_cache:
-          keys:
-            - bundle-v2-{{ checksum "Gemfile.lock" }}
-            - bundle-v2-
-      - run: bundle install --path vendor/bundle
-      - save_cache:
-          key: bundle-v2-{{ checksum "Gemfile.lock" }}
-          paths:
-            - vendor/bundle
+      - <<: *restore_cache
+      - <<: *bundle
+      - <<: *save_cache
       - run: rake internal_investigation spec
 
   code-climate:
     docker:
       - image: circleci/ruby:2.5
+    environment:
+      RUBY_VERSION: circleci/ruby:2.5
     steps:
       - checkout
-      - run: bundle install
+      - <<: *restore_cache
+      - <<: *bundle
+      - <<: *save_cache
       - run:
           name: Setup Code Climate test-reporter
           command: |
