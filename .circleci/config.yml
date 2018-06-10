@@ -21,7 +21,7 @@ rspec: &rspec
     - <<: *restore_cache
     - <<: *bundle
     - <<: *save_cache
-    - run: rake spec
+    - run: bundle exec rake spec
 
 rubocop: &rubocop
   steps:
@@ -29,7 +29,7 @@ rubocop: &rubocop
     - <<: *restore_cache
     - <<: *bundle
     - <<: *save_cache
-    - run: rake internal_investigation
+    - run: bundle exec rake internal_investigation
 
 jobs:
   confirm_config_and_documentation:
@@ -40,7 +40,7 @@ jobs:
       - <<: *restore_cache
       - <<: *bundle
       - <<: *save_cache
-      - run: rake confirm_config documentation_syntax_check confirm_documentation
+      - run: bundle exec rake confirm_config documentation_syntax_check confirm_documentation
 
   # Ruby 2.1
   ruby-2.1-rspec:
@@ -102,7 +102,7 @@ jobs:
       - <<: *restore_cache
       - <<: *bundle
       - <<: *save_cache
-      - run: rake internal_investigation spec
+      - run: bundle exec rake internal_investigation spec
 
   code-climate:
     docker:
