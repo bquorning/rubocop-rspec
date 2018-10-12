@@ -1,11 +1,13 @@
+require 'simplecov'
+
+if ENV['CI'] == 'true'
+  require 'codecov'
+  SimpleCov.formatter = SimpleCov::Formatter::Codecov
+end
+
 require 'rubocop'
 
 require 'rubocop/rspec/support'
-
-if ENV['COVERAGE'] == 'true'
-  require 'simplecov'
-  SimpleCov.start
-end
 
 module SpecHelper
   ROOT = Pathname.new(__dir__).parent.freeze
