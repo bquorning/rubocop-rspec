@@ -1,9 +1,9 @@
 inherit_from: .rubocop_todo.yml
 
 require:
- - rubocop-performance
- - rubocop-rspec
- - rubocop/cop/internal_affairs
+  - rubocop-performance
+  - rubocop-rspec
+  - rubocop/cop/internal_affairs
 
 AllCops:
   DisplayCopNames: true
@@ -20,7 +20,7 @@ Layout/HashAlignment:
   Enabled: false
 
 Layout/LineLength:
-  Max: 80 # default: 120
+  Max: 80  # default: 120
 
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
